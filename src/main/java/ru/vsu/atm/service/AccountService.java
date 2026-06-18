@@ -1,6 +1,7 @@
 package ru.vsu.atm.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.vsu.atm.dto.AccountResponse;
 import ru.vsu.atm.dto.SummaryResponse;
 import ru.vsu.atm.exception.ValidationException;
@@ -22,22 +23,20 @@ public class AccountService {
     public BankAccount openAccount(Long userId, AccountType type) {
         User user = userService.getUserById(userId);
         BankAccount account = (type == AccountType.DEBIT) ? new DebitAccount() : new CreditAccount();
-        accountRepository.save(account);
-        user.getAccounts().add(account);
-        return account;
+        account.setUser(user);
+        return accountRepository.save(account);
     }
 
     public BankAccount getAccount(Long accountId) {
-        BankAccount account = accountRepository.findById(accountId);
-        if (account == null) throw new ValidationException("Счет не найден.");
-        return account;
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new ValidationException("Счет не найден."));
     }
 
     public BankAccount deposit(Long accountId, long amount) {
         if (amount <= 0) throw new ValidationException("Сумма должна быть > 0.");
         BankAccount account = getAccount(accountId);
         account.deposit(amount);
-        return account;
+        return accountRepository.save(account);
     }
 
     public BankAccount withdraw(Long accountId, long amount) {
@@ -47,9 +46,10 @@ public class AccountService {
             throw new ValidationException("Недостаточно средств.");
         }
         account.withdraw(amount);
-        return account;
+        return accountRepository.save(account);
     }
 
+    @Transactional
     public void transfer(Long fromId, Long toId, long amount) {
         withdraw(fromId, amount);
         deposit(toId, amount);
