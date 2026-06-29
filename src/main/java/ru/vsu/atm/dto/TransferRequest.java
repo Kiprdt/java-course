@@ -4,7 +4,6 @@ public class TransferRequest {
     private Long fromAccountId;
     private Long toAccountId;
     private long amount;
-    // Сгенерируй/напиши get/set для всех полей
     public Long getFromAccountId() { return fromAccountId; }
     public void setFromAccountId(Long fromAccountId) { this.fromAccountId = fromAccountId; }
     public Long getToAccountId() { return toAccountId; }
