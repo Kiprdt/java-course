@@ -12,7 +12,6 @@ public class TransferResponse {
         this.amount = amount;
         this.status = status;
     }
-    // Сгенерируй/напиши геттеры
     public Long getFromAccountId() { return fromAccountId; }
     public Long getToAccountId() { return toAccountId; }
     public long getAmount() { return amount; }
