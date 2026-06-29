@@ -2,7 +2,7 @@ package ru.vsu.atm.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.vsu.atm.model.AccountType;
 
-// Игнорируем null-поля (creditLine не покажется у Debit)
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountResponse {
     private Long id;
@@ -11,7 +11,7 @@ public class AccountResponse {
     private Long creditLine;
     private long availableBalance;
 
-    // Конструктор, геттеры и сеттеры
+ 
     public AccountResponse(Long id, AccountType type, long balance, Long creditLine, long availableBalance) {
         this.id = id;
         this.type = type;
